@@ -1,0 +1,52 @@
+CREATE TABLE [dbo].[Cities] (
+    [Id]      INT           IDENTITY (1, 1) NOT NULL,
+    [Name]    NVARCHAR (50) NOT NULL,
+    [Country] NVARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[Clients] (
+    [Identification_number] NVARCHAR (13) NOT NULL,
+    [Name_Surname]          NVARCHAR (50) NOT NULL,
+    [Telephone_number]      NVARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([Identification_number] ASC)
+);
+
+CREATE TABLE [dbo].[Owners] (
+    [Id]               INT           IDENTITY (1, 1) NOT NULL,
+    [OwnerNameSurname] NVARCHAR (50) NOT NULL,
+    [Username]         NVARCHAR (50) NOT NULL,
+    [Password]         NVARCHAR (50) NOT NULL,
+    [Role]             NVARCHAR (50) NOT NULL,
+    [SecureQuestion1]  NVARCHAR (50) NOT NULL,
+    [SecureQuestion2]  NVARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[Apartments] (
+    [Id]       INT           IDENTITY (1, 1) NOT NULL,
+    [City_Id]  INT           NOT NULL,
+    [Address]  NVARCHAR (50) NOT NULL,
+    [Type]     NVARCHAR (50) NOT NULL,
+    [Number]   INT           NULL,
+    [Owner_Id] INT           NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Apartments_Cities] FOREIGN KEY ([City_Id]) REFERENCES [dbo].[Cities] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Apartments_Owners] FOREIGN KEY ([Owner_Id]) REFERENCES [dbo].[Owners] ([Id]) ON DELETE CASCADE
+);
+
+CREATE TABLE [dbo].[Monitoring] (
+    [Id]                           INT           IDENTITY (1, 1) NOT NULL,
+    [Apartment_Id]                 INT           NOT NULL,
+    [Client_Identification_number] NVARCHAR (13) NOT NULL,
+    [Date]                         DATETIME      NOT NULL,
+    [Status]                       NVARCHAR (20) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Monitoring_Clients] FOREIGN KEY ([Client_Identification_number]) REFERENCES [dbo].[Clients] ([Identification_number]),
+    CONSTRAINT [FK_Monitoring_Apartments] FOREIGN KEY ([Apartment_Id]) REFERENCES [dbo].[Apartments] ([Id]) ON DELETE CASCADE
+);
+
+
+
+
+
